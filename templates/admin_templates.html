@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="col-md-12 mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                
+            </div>
+            <div class="col-md-4">
+                <h5 style="color: rgb(6, 75, 136);"><b>Urls total data count : {{items_data|length}}</b></h5>
+                <table class="table table-dark">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Url</th>
+                        <th scope="col">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% if items_data %}
+                        {% for i in items_data %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{ i.url }}</td>
+                            <td>{{ i.scrape_date }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <p style="color: aqua;">No Data...</p>
+                        {% endif %}
+                    </tbody>
+                </table>
+                <a href="{% url 'download_csv' %}" class="btn btn-sm" style="color: rgb(7, 7, 7); background-color: aqua;">
+                    <b>Download CSV</b>
+                </a>
+                <a href="{% url 'delete_all_urls' %}" onclick="return confirmDelete();" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete all data?');">
+                    <b>Delete Data</b>
+                </a>              
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</div>
+<script>
+    function confirmDelete() {
+        return confirm('Are you sure you want to delete all data?');
+    }
+
+    // Check if 'deleted=true' exists in the URL and show an alert
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('deleted')) {
+            alert("All data has been successfully deleted!");
+            window.location.href = window.location.pathname;  // Remove query parameter
+        }
+    };
+</script>
+{% endblock %}
